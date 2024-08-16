@@ -66,7 +66,7 @@ div_header.appendChild(div);
 /* Create header::user: chips */
 var user = document.getElementById("user");
 var div = document.createElement("div");
-div.id = "user-chips";
+div.id = "user_chips";
 div.className = "user__chips";
 div.style.display = "flex";
 div.style.alignItems = "center";
@@ -78,11 +78,11 @@ img.id = "poker_chip";
 img.style.width = "50px";
 img.style.height = "50px";
 div.appendChild(img);
-var h5 = document.createElement("h1");
-h5.id = "user-chips-count";
-h5.innerText = "1000000";
-h5.style.color = "white";
-div.appendChild(h5);
+var h1 = document.createElement("h1");
+h1.id = "user_chips_count";
+h1.innerText = "1000000";
+h1.style.color = "white";
+div.appendChild(h1);
 user.appendChild(div);
 
 /* Create header::user: account */
@@ -370,11 +370,16 @@ img.src = "assets/poker_chip.png";
 img.style.width = "25px";
 img.style.height = "25px";
 bet_amount_title.appendChild(img);
-var h3 = document.createElement("h3");
-h3.id = "bet_amount_count";
-h3.style.color = "white";
-h3.innerText = "0";
-bet_amount_title.appendChild(h3);
+var input = document.createElement("input");
+input.id = "bet_amount_count";
+input.type = "text";
+input.placeholder = "Enter an amount to bet...";
+input.style.fontSize = "1.17em";
+input.style.outline = "none";
+input.style.border = "none";
+input.style.backgroundColor = "inherit";
+input.style.color = "white";
+bet_amount_title.appendChild(input);
 
 /* bet modify: section */
 var div = document.createElement("div");
@@ -545,6 +550,7 @@ div.style.justifyContent = "space-between";
 mn_rolls_con01.appendChild(div);
 
 /* bet type::section: red */
+var bet_type = document.querySelector("#bet_type");
 var div = document.createElement("div");
 div.id = "bet_type_red";
 div.className = "bet__type_red";
@@ -669,121 +675,88 @@ bet_type_black_button.appendChild(h2);
 
 
 
-class Player {
-    constructor(chips) {
-        this.chips = chips;
-    }
+var user_chips_count = document.querySelector("#user_chips_count"); 
+var bet_amount_count = document.querySelector("#bet_amount_count"); 
 
-    get chips() {
-        return this._chips;
-    }
+function betType(type) {
+    var currentChips = Number(user_chips_count.innerText);
+    var currentBet = Number(bet_amount_count.value);
 
-    set chips(newValue) {
-        this._chips = newValue;
-        var user_chips_count = document.querySelector("#user-chips-count");
-        user_chips_count.innerText = this.chips.toString();
+    if (type == 0) {
+        currentBet = 0;
+    } else if (type == 1) {
+        currentBet = last_bet;
+    } else if (type == 2) {
+        currentBet+=1;
+    } else if (type == 3) {
+        currentBet+=10;
+    } else if (type == 4) {
+        currentBet+=100;
+    } else if (type == 5) {
+        currentBet+=1000;
+    } else if (type == 6) {
+        currentBet/=2;
+    } else if (type == 7) {
+        currentBet*=2;
+    } else {
+        currentBet = currentChips;
+    } 
+    
+    if (currentBet < 0 || currentBet > currentChips || isNaN(currentBet)) {
+        currentBet = 0;
+        bet_amount_count.value = "";
+    } else {
+        bet_amount_count.value = currentBet.toString();
     }
+   
 }
 
-class Bet {
-    constructor() {
-        this.bet_chips = 0;
-        this.last_bet = 0;
-        this.valid_bet = 0;
-    }
+function placeBet() {
+    var currentChips = Number(user_chips_count.innerText);
+    var currentBet = Number(bet_amount_count.value);
 
-    get bet_chips() {
-        return this._bet_chips;
-    }
-
-    get last_chips() {
-        return this._last_chips;
-    }
-
-    set bet_chips(newValue) {
-        this._bet_chips = newValue;
-        var bet_amount_count = document.querySelector("#bet_amount_count");
-        bet_amount_count.innerText = this._bet_chips.toString();
-    }
-
-    set last_chips(newValue) {
-        this._last_chips = newValue;
-    }
-
-    betType(currentChips, type) {
-        var new_bet_chips = this.bet_chips;
-
-        if (type == 0) {
-            new_bet_chips = 0;
-        } else if (type == 1) {
-            new_bet_chips = this._last_chips;
-        } else if (type == 2) {
-            new_bet_chips+=1;
-        } else if (type == 3) {
-            new_bet_chips+=10;
-        } else if (type == 4) {
-            new_bet_chips+=100;
-        } else if (type == 5) {
-            new_bet_chips+=1000;
-        } else if (type == 6) {
-            new_bet_chips/=2;
-        } else if (type == 7) {
-            new_bet_chips*=2;
-        } else {
-            new_bet_chips = currentChips;
-        }
-
-        if (new_bet_chips <= currentChips) {
-            this.bet_chips = new_bet_chips;
-            this.valid_bet = 1;
-        } else {
-            new_bet_chips = 0;
-            this.valid_bet = 0;
-        }
-    }
-
-    placeBet(player) {
-        if (this.valid_bet) {
-            player.chips-=this.bet_chips;
-        }
+    if (currentBet < 0 || currentBet > currentChips || isNaN(currentBet)) {
+        currentBet = 0;
+        bet_amount_count.value = "";
+    } else {
+        currentChips-=currentBet;
+        user_chips_count.innerText = currentChips.toString();
+        last_bet = currentBet;
     }
 }
-
-const player = new Player(1000000);
-const bet = new Bet();
 
 var clear_button = document.querySelector("#clear_button");
-clear_button.addEventListener("click", function() {bet.betType(player.chips, 0)})
+clear_button.addEventListener("click", function() {betType(0)})
 
 var last_button = document.querySelector("#last_button");
-last_button.addEventListener("click", function() {bet.betType(player.chips, 1)})
+last_button.addEventListener("click", function() {betType(1)})
 
 var plus_button = document.querySelector("#plus_button");
-plus_button.addEventListener("click", function() {bet.betType(player.chips, 2)});
+plus_button.addEventListener("click", function() {betType(2)});
 
 var plus_ten_button = document.querySelector("#plus_ten_button");
-plus_ten_button.addEventListener("click", function() {bet.betType(player.chips, 3)});
+plus_ten_button.addEventListener("click", function() {betType(3)});
 
 var plus_hundred_button = document.querySelector("#plus_hundred_button");
-plus_hundred_button.addEventListener("click", function() {bet.betType(player.chips, 4)});
+plus_hundred_button.addEventListener("click", function() {betType(4)});
 
 var plus_thousand_button = document.querySelector("#plus_thousand_button");
-plus_thousand_button.addEventListener("click", function() {bet.betType(player.chips, 5)});
+plus_thousand_button.addEventListener("click", function() {betType(5)});
 
 var half_button = document.querySelector("#half_button");
-half_button.addEventListener("click", function() {bet.betType(player.chips, 6)});
+half_button.addEventListener("click", function() {betType(6)});
 
 var times_button = document.querySelector("#times_button");
-times_button.addEventListener("click", function() {bet.betType(player.chips, 7)});
+times_button.addEventListener("click", function() {betType(7)});
 
 var max_button = document.querySelector("#max_button");
-max_button.addEventListener("click", function() {bet.betType(player.chips, 8)});
+max_button.addEventListener("click", function() {betType(8)});
 
 var red_button = document.querySelector("#bet_type_red_button");
-red_button.addEventListener("click", function() {bet.placeBet(player)});
+red_button.addEventListener("click", function() {placeBet()});
 
 var green_button = document.querySelector("#bet_type_green_button");
-green_button.addEventListener("click", function() {bet.placeBet(player)});
+green_button.addEventListener("click", function() {placeBet()});
 
 var black_button = document.querySelector("#bet_type_black_button");
-black_button.addEventListener("click", function() {bet.placeBet(player)});
+black_button.addEventListener("click", function() {placeBet()});
