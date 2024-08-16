@@ -79,6 +79,7 @@ img.style.width = "50px";
 img.style.height = "50px";
 div.appendChild(img);
 var h5 = document.createElement("h1");
+h5.id = "user-chips-count";
 h5.innerText = "1000000";
 h5.style.color = "white";
 div.appendChild(h5);
@@ -370,8 +371,9 @@ img.style.width = "25px";
 img.style.height = "25px";
 bet_amount_title.appendChild(img);
 var h3 = document.createElement("h3");
+h3.id = "bet_amount_count";
 h3.style.color = "white";
-h3.innerText = "1000000";
+h3.innerText = "0";
 bet_amount_title.appendChild(h3);
 
 /* bet modify: section */
@@ -646,3 +648,142 @@ var h2 = document.createElement("h2");
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
 bet_type_black_button.appendChild(h2);
+
+
+
+/* ====================================================================================================================
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ * Roulette Game Functions                                                                                            *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ *                                                                                                                    *
+ * ==================================================================================================================*/
+
+
+
+class Player {
+    constructor(chips) {
+        this.chips = chips;
+    }
+
+    get chips() {
+        return this._chips;
+    }
+
+    set chips(newValue) {
+        this._chips = newValue;
+        var user_chips_count = document.querySelector("#user-chips-count");
+        user_chips_count.innerText = this.chips.toString();
+    }
+}
+
+class Bet {
+    constructor() {
+        this.bet_chips = 0;
+        this.last_bet = 0;
+        this.valid_bet = 0;
+    }
+
+    get bet_chips() {
+        return this._bet_chips;
+    }
+
+    get last_chips() {
+        return this._last_chips;
+    }
+
+    set bet_chips(newValue) {
+        this._bet_chips = newValue;
+        var bet_amount_count = document.querySelector("#bet_amount_count");
+        bet_amount_count.innerText = this._bet_chips.toString();
+    }
+
+    set last_chips(newValue) {
+        this._last_chips = newValue;
+    }
+
+    betType(currentChips, type) {
+        var new_bet_chips = this.bet_chips;
+
+        if (type == 0) {
+            new_bet_chips = 0;
+        } else if (type == 1) {
+            new_bet_chips = this._last_chips;
+        } else if (type == 2) {
+            new_bet_chips+=1;
+        } else if (type == 3) {
+            new_bet_chips+=10;
+        } else if (type == 4) {
+            new_bet_chips+=100;
+        } else if (type == 5) {
+            new_bet_chips+=1000;
+        } else if (type == 6) {
+            new_bet_chips/=2;
+        } else if (type == 7) {
+            new_bet_chips*=2;
+        } else {
+            new_bet_chips = currentChips;
+        }
+
+        if (new_bet_chips <= currentChips) {
+            this.bet_chips = new_bet_chips;
+            this.valid_bet = 1;
+        } else {
+            new_bet_chips = 0;
+            this.valid_bet = 0;
+        }
+    }
+
+    placeBet(player) {
+        if (this.valid_bet) {
+            player.chips-=this.bet_chips;
+        }
+    }
+}
+
+const player = new Player(1000000);
+const bet = new Bet();
+
+var clear_button = document.querySelector("#clear_button");
+clear_button.addEventListener("click", function() {bet.betType(player.chips, 0)})
+
+var last_button = document.querySelector("#last_button");
+last_button.addEventListener("click", function() {bet.betType(player.chips, 1)})
+
+var plus_button = document.querySelector("#plus_button");
+plus_button.addEventListener("click", function() {bet.betType(player.chips, 2)});
+
+var plus_ten_button = document.querySelector("#plus_ten_button");
+plus_ten_button.addEventListener("click", function() {bet.betType(player.chips, 3)});
+
+var plus_hundred_button = document.querySelector("#plus_hundred_button");
+plus_hundred_button.addEventListener("click", function() {bet.betType(player.chips, 4)});
+
+var plus_thousand_button = document.querySelector("#plus_thousand_button");
+plus_thousand_button.addEventListener("click", function() {bet.betType(player.chips, 5)});
+
+var half_button = document.querySelector("#half_button");
+half_button.addEventListener("click", function() {bet.betType(player.chips, 6)});
+
+var times_button = document.querySelector("#times_button");
+times_button.addEventListener("click", function() {bet.betType(player.chips, 7)});
+
+var max_button = document.querySelector("#max_button");
+max_button.addEventListener("click", function() {bet.betType(player.chips, 8)});
+
+var red_button = document.querySelector("#bet_type_red_button");
+red_button.addEventListener("click", function() {bet.placeBet(player)});
+
+var green_button = document.querySelector("#bet_type_green_button");
+green_button.addEventListener("click", function() {bet.placeBet(player)});
+
+var black_button = document.querySelector("#bet_type_black_button");
+black_button.addEventListener("click", function() {bet.placeBet(player)});
