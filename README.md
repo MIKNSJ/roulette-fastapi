@@ -13,7 +13,7 @@ Unlike previous websites that I have built, this will be mostly created using Ja
 
 Also, the responsive/adaptive design will not be fully enforced. This means that the website may not render properly on
 smaller devices. For the BEST viewing purposes, I recommend loading the website on a device with at least the screen
-size of a laptop.
+size of 1300px.
 
 ## Contents
 - ```assets```: contains images displayed on the website
@@ -37,7 +37,7 @@ Since assets are constantly being updated, please refer to the ```assets``` fold
 to find out more.
 
 ## Changelog
-- Website Version 1.0 established on TBD 20XX
+- Website Version 1.0 established on August 2024
 
 ## License
-Established on TBD 20XX by MIKNSJ.
+Established on August 2024 by MIKNSJ.

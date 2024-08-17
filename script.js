@@ -289,8 +289,8 @@ last_rolls.appendChild(div);
 var last_10 = document.querySelector("#last_10");
 for (var i = 0; i < 10; i++) {
     var div = document.createElement("div");
-    div.id = "circle_" + (i + 1);
-    div.className = "circle";
+    div.id = "recent_" + (i + 1);
+    div.className = "recent";
     div.style.width = "30px";
     div.style.height = "30px";
     div.style.borderRadius = "5px";
@@ -763,6 +763,7 @@ var bet__type_text = document.querySelectorAll(".bet__type_text");
 var square = document.querySelectorAll(".square");
 var mid_square = document.querySelector("#square11");
 var mid_square_two = document.querySelector("#square69");
+var recent = document.querySelectorAll(".recent");
 var red_count = document.querySelector("#red_count");
 var black_count = document.querySelector("#black_count");
 var green_count = document.querySelector("#green_count");
@@ -771,9 +772,28 @@ var firstLoadColor = "black";
 var lastGreen = 0;
 var actualColor = 0;
 var last_100_arr = [];
+var last_10_arr = [];
 var num_red = 0;
 var num_green = 0;
 var num_black = 0;
+const bet_placed_audio = new Audio("assets/bet_placed.mp3");
+const wheel_spin_audio = new Audio("assets/wheel_spin.mp3");
+const won_audio = new Audio("assets/won.mp3");
+const lose_audio = new Audio("assets/lose.mp3");
+
+function recentTenColors() {
+    for (var i = 0; i < 10; i++) {
+        if (last_10_arr[i] == 1) {
+            recent[i].style.backgroundColor = "red";
+        } else if (last_10_arr[i] == 2) {
+            recent[i].style.backgroundColor = "#36454F";
+        } else if (last_10_arr[i] == 3) {
+            recent[i].style.backgroundColor = "#4CBB17";
+        } else {
+            recent[i].style.backgroundColor = "white";
+        }
+    }
+}
 
 function determineColor() {
     const minCeiled = Math.ceil(0);
@@ -783,13 +803,13 @@ function determineColor() {
 
     if (selectedNum > 0 && selectedNum <= 19) {
         color = 1;
-        console.log("red");
+        //console.log("red");
     } else if (selectedNum > 19 && selectedNum <= 37) {
         color = 2;
-        console.log("black");
+        //console.log("black");
     } else {
         color = 3;
-        console.log("green");
+        //console.log("green");
     }
 
     return color;
@@ -804,13 +824,15 @@ function determineWinner(expectedColor, actualColor) {
         newChips = 2 * currentBet;
         currentChips+=newChips;
         user_chips_count.innerText = currentChips.toString();
+        won_audio.play();
     } else if (expectedColor == actualColor && actualColor == 3) {
         newChips = 14 * currentBet;
-        currentChips+=newChips;
-        user_chips_count.innerText = currentChips.toString();
+        currentChips+=newChips; user_chips_count.innerText = currentChips.toString();
+        won_audio.play();
     } else {
         currentChips-=currentBet;
         user_chips_count.innerText = currentChips.toString();
+        lose_audio.play();
     }
 }
 
@@ -838,6 +860,11 @@ function resetBets() {
             green_count.innerText = num_green.toString();
         }
     }
+
+    if (last_10_arr.length > 10) {
+        last_10_arr.pop();
+    }
+    recentTenColors();
 
     if (actualColor == 1) {
         num_red+=1;
@@ -907,6 +934,7 @@ function rollWheel() {
             lastGreen = 1;
         }
         
+        wheel_spin_audio.play();
         for (var i = 0; i < square.length; i++) {
             square[i].style.transition = "transform 5s";
 
@@ -933,6 +961,7 @@ function rollWheel() {
             }
             clearInterval(cooldown);
             last_100_arr.push(actualColor);
+            last_10_arr.unshift(actualColor);
             determineWinner(expectedColor, actualColor);
             resetBets();
         }
@@ -1029,6 +1058,7 @@ function placeBet(e) {
             e.target.querySelector(".bet__type_text").innerText = "BET PLACED";
         }
 
+        bet_placed_audio.play();
         betCooldown();
     }
 }
