@@ -101,6 +101,46 @@ header.after(main);
 /* Create footer tag */
 var footer = document.createElement("footer");
 main.after(footer);
+var div = document.createElement("div");
+div.id = "ft-foot-con01";
+div.className = "container";
+div.style.maxWidth = "1300px";
+div.style.margin = "0 auto";
+footer.appendChild(div);
+
+/* barrier */
+var ft_foot_con01 = document.querySelector("#ft-foot-con01");
+var div = document.createElement("div");
+div.id = "barrier_06";
+div.className = "barrier";
+div.style.height = "125px";
+ft_foot_con01.appendChild(div);
+
+/* Create copyright section */
+var div = document.createElement("div");
+div.id = "copyright";
+div.className = "copyright_"
+div.style.display = "flex";
+div.style.justifyContent = "space-between";
+div.style.alignItems = "center";
+ft_foot_con01.appendChild(div);
+
+var copyright = document.querySelector("#copyright");
+var p = document.createElement("p");
+var copy_unicode = "\u00A9";
+p.style.color = "white";
+p.innerText = copy_unicode + " MIKNSJ GRAND 2024";
+copyright.appendChild(p);
+
+var a = document.createElement("a");
+a.innerText = "VIEW SOURCE";
+a.id = "source_link";
+a.href = "https://github.com/MIKNSJ/roulette";
+a.target = "_blank";
+a.rel = "noopener noreferrer";
+a.style.textDecoration = "none";
+a.style.color = "white";
+copyright.appendChild(a);
 
 /* Create rolls: container */
 var div = document.createElement("div");
@@ -283,7 +323,7 @@ mn_rolls_con01.appendChild(div);
 
 /* wheel: insert items */
 var wheel = document.querySelector("#wheel");
-for (var i = 0; i < 38; i++) {
+for (var i = 0; i < 22; i++) {
     var div = document.createElement("div");
     div.id = "square" + (i + 1);
     div.className = "square";
@@ -292,6 +332,7 @@ for (var i = 0; i < 38; i++) {
     div.style.borderRadius = "5px";
     div.style.backgroundColor = "white";
     div.style.padding = "30px";
+    div.style.transition = "transform 1s";
     wheel.appendChild(div);
 }
 
@@ -306,15 +347,30 @@ mn_rolls_con01.appendChild(div);
 var div = document.createElement("div");
 div.id = "timer";
 div.className = "timer_";
-div.style.textAlign = "center";
+div.style.display = "flex";
+div.style.flexDirection = "column";
+div.style.gap = "20px";
 mn_rolls_con01.appendChild(div);
 
-/* timer: insert */
+/* timer: text */
 var timer = document.querySelector("#timer");
 var h2 = document.createElement("h2");
+h2.id = "timer_text";
 h2.style.color = "white";
-h2.innerText = "ROLLING IN: 10 SECONDS";
+h2.style.alignSelf = "center";
+h2.innerText = "PLACE YOUR BETS BELOW";
 timer.appendChild(h2);
+
+/* timer: load bar */
+var div = document.createElement("div");
+div.id = "timer_bar";
+div.style.backgroundColor = "white";
+div.style.display = "block";
+div.style.content = "";
+div.style.height = "3px";
+div.style.width = "100%";
+div.style.transition = "width 5s";
+timer.appendChild(div);
 
 /* barrier */
 var div = document.createElement("div");
@@ -581,6 +637,8 @@ button.style.padding = "5px 100px";
 bet_type_red.appendChild(button);
 var bet_type_red_button = document.querySelector("#bet_type_red_button");
 var h2 = document.createElement("h2");
+h2.id = "bet_type_red_bet_text";
+h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
 bet_type_red_button.appendChild(h2);
@@ -616,6 +674,8 @@ button.style.padding = "5px 100px";
 bet_type_green.appendChild(button);
 var bet_type_green_button = document.querySelector("#bet_type_green_button");
 var h2 = document.createElement("h2");
+h2.id = "bet_type_green_bet_text";
+h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
 bet_type_green_button.appendChild(h2);
@@ -651,6 +711,8 @@ button.style.padding = "5px 100px";
 bet_type_black.appendChild(button);
 var bet_type_black_button = document.querySelector("#bet_type_black_button");
 var h2 = document.createElement("h2");
+h2.id = "bet_type_black_bet_text";
+h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
 bet_type_black_button.appendChild(h2);
@@ -677,6 +739,37 @@ bet_type_black_button.appendChild(h2);
 
 var user_chips_count = document.querySelector("#user_chips_count"); 
 var bet_amount_count = document.querySelector("#bet_amount_count"); 
+var timer_text = document.querySelector("#timer_text");
+var timer_bar = document.querySelector("#timer_bar");
+var square = document.querySelectorAll(".square");
+
+function rollWheel() {
+    setInterval(() => {
+        for (var i = 0; i < square.length; i++) {
+            square[i].style.transform = "translateX(-90px)";
+        }
+    }, 1000);
+}
+
+function betCooldown() {
+    const start_time = Date.now();
+    var current_time = Date.now();
+    var diff = 6100;
+    var seconds = 6;
+
+    var cooldown = setInterval(() => {
+        current_time = Date.now();
+        timer_bar.style.width = "0%";
+        var current_diff_seconds = Math.round((current_time - start_time) / 1000);
+        timer_text.innerText = "ROLLING IN: " + (seconds - current_diff_seconds) + " SECONDS"; 
+
+        if (current_time - start_time >= diff) {
+            clearInterval(cooldown);
+            timer_text.innerText = "ROLLING NOW"; 
+            rollWheel();
+        }
+    }, 1000)
+}
 
 function betType(type) {
     var currentChips = Number(user_chips_count.innerText);
@@ -702,7 +795,7 @@ function betType(type) {
         currentBet = currentChips;
     } 
     
-    if (currentBet < 0 || currentBet > currentChips || isNaN(currentBet)) {
+    if (currentBet <= 0 || currentBet > currentChips || isNaN(currentBet)) {
         currentBet = 0;
         bet_amount_count.value = "";
     } else {
@@ -711,17 +804,28 @@ function betType(type) {
    
 }
 
-function placeBet() {
+function placeBet(e) {
     var currentChips = Number(user_chips_count.innerText);
     var currentBet = Number(bet_amount_count.value);
 
-    if (currentBet < 0 || currentBet > currentChips || isNaN(currentBet)) {
+    if (currentBet <= 0 || currentBet > currentChips || isNaN(currentBet)) {
         currentBet = 0;
         bet_amount_count.value = "";
     } else {
         currentChips-=currentBet;
         user_chips_count.innerText = currentChips.toString();
         last_bet = currentBet;
+
+        bet_placed.style.pointerEvents = "none";
+        bet_type.style.pointerEvents = "none";
+
+        if (e.target.className == "bet__type_text") {
+            e.target.innerText = "BET PLACED";
+        } else {
+            e.target.querySelector(".bet__type_text").innerText = "BET PLACED";
+        }
+
+        betCooldown();
     }
 }
 
@@ -753,10 +857,11 @@ var max_button = document.querySelector("#max_button");
 max_button.addEventListener("click", function() {betType(8)});
 
 var red_button = document.querySelector("#bet_type_red_button");
-red_button.addEventListener("click", function() {placeBet()});
+red_button.addEventListener("click", function(event) {placeBet(event)});
 
 var green_button = document.querySelector("#bet_type_green_button");
-green_button.addEventListener("click", function() {placeBet()});
+green_button.addEventListener("click", function(event) {placeBet(event)});
 
 var black_button = document.querySelector("#bet_type_black_button");
-black_button.addEventListener("click", function() {placeBet()});
+black_button.addEventListener("click", function(event) {placeBet(event)});
+
