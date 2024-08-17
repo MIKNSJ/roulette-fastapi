@@ -3,6 +3,12 @@
 ## Overview
 The casino game featuring a wheel of numbers where you have to predict where the ball will land.
 
+## Video
+Check out a video of the website [here](https://www.youtube.com/watch?v=Sgs9wJHx90s).
+
+## Screenshots
+![website](screenshots/roulette_website.png)
+
 ## Description
 View the website [here](https://miknsj.github.io/roulette).
 
