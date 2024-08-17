@@ -211,7 +211,7 @@ div.id = "red_circle";
 div.className = "red__circle";
 div.style.width = "20px";
 div.style.height = "20px";
-div.style.borderRadius = "50%";
+div.style.borderRadius = "5px";
 div.style.boxShadow = "1px 1px 3px 1px rgba(0,0,0,0.25)";
 div.style.backgroundColor = "red";
 red_stats.appendChild(div);
@@ -238,7 +238,7 @@ div.id = "green_circle";
 div.className = "green__circle";
 div.style.width = "20px";
 div.style.height = "20px";
-div.style.borderRadius = "50%";
+div.style.borderRadius = "5px";
 div.style.boxShadow = "1px 1px 3px 1px rgba(0,0,0,0.25)";
 div.style.backgroundColor = "green";
 green_stats.appendChild(div);
@@ -265,9 +265,9 @@ div.id = "black_circle";
 div.className = "black__circle";
 div.style.width = "20px";
 div.style.height = "20px";
-div.style.borderRadius = "50%";
+div.style.borderRadius = "5px";
 div.style.boxShadow = "1px 1px 3px 1px rgba(0,0,0,0.25)";
-div.style.backgroundColor = "#343434";
+div.style.backgroundColor = "#36454F";
 black_stats.appendChild(div);
 
 var h3 = document.createElement("h3");
@@ -293,7 +293,7 @@ for (var i = 0; i < 10; i++) {
     div.className = "circle";
     div.style.width = "30px";
     div.style.height = "30px";
-    div.style.borderRadius = "50%";
+    div.style.borderRadius = "5px";
     div.style.boxShadow = "1px 1px 3px 1px rgba(0,0,0,0.25)";
     div.style.backgroundColor = "white";
     last_10.appendChild(div);
@@ -309,6 +309,7 @@ mn_rolls_con01.appendChild(div);
 
 /* Create wheel */
 var div = document.createElement("div");
+div.style.position = "relative";
 div.id = "wheel";
 div.className = "wheel_";
 div.style.display = "flex";
@@ -316,23 +317,39 @@ div.style.alignItems = "center";
 div.style.backgroundColor = "#28282B";
 div.style.borderRadius = "5px";
 div.style.overflow = "hidden";
-div.style.padding = "30px";
+div.style.padding = "30px 30px 30px 0";
 div.style.gap = "5px";
 div.style.boxShadow = "1px 1px 3px 1px rgba(0,0,0,0.25)";
 mn_rolls_con01.appendChild(div);
 
-/* wheel: insert items */
+/* wheel-center line */
 var wheel = document.querySelector("#wheel");
-for (var i = 0; i < 22; i++) {
+var div = document.createElement("div");
+div.id = "wheel_center_line";
+div.style.width = "3px";
+div.style.height = "120px";
+div.style.position = "absolute";
+div.style.left = "650px";
+div.style.backgroundColor = "white";
+div.style.zIndex = "1";
+wheel.appendChild(div);
+
+/* wheel: insert items */
+for (var i = 0; i < 82; i++) {
     var div = document.createElement("div");
     div.id = "square" + (i + 1);
     div.className = "square";
     div.style.width = "50px";
     div.style.height = "50px";
     div.style.borderRadius = "5px";
-    div.style.backgroundColor = "white";
+    if (i % 2 == 0) {
+        div.style.backgroundColor = "#36454F";
+    } else {
+        div.style.backgroundColor = "red";
+    }
     div.style.padding = "30px";
-    div.style.transition = "transform 1s";
+    div.style.transform = "translateX(-30px)";
+    div.style.transition = "transform 5s";
     wheel.appendChild(div);
 }
 
@@ -435,6 +452,7 @@ input.style.outline = "none";
 input.style.border = "none";
 input.style.backgroundColor = "inherit";
 input.style.color = "white";
+input.autocomplete = "off";
 bet_amount_title.appendChild(input);
 
 /* bet modify: section */
@@ -637,7 +655,7 @@ button.style.padding = "5px 100px";
 bet_type_red.appendChild(button);
 var bet_type_red_button = document.querySelector("#bet_type_red_button");
 var h2 = document.createElement("h2");
-h2.id = "bet_type_red_bet_text";
+h2.id = "bet_type_red_text";
 h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
@@ -674,7 +692,7 @@ button.style.padding = "5px 100px";
 bet_type_green.appendChild(button);
 var bet_type_green_button = document.querySelector("#bet_type_green_button");
 var h2 = document.createElement("h2");
-h2.id = "bet_type_green_bet_text";
+h2.id = "bet_type_green_text";
 h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
@@ -711,7 +729,7 @@ button.style.padding = "5px 100px";
 bet_type_black.appendChild(button);
 var bet_type_black_button = document.querySelector("#bet_type_black_button");
 var h2 = document.createElement("h2");
-h2.id = "bet_type_black_bet_text";
+h2.id = "bet_type_black_text";
 h2.classList = "bet__type_text";
 h2.style.color = "white";
 h2.innerText = "PLACE BET";
@@ -741,14 +759,186 @@ var user_chips_count = document.querySelector("#user_chips_count");
 var bet_amount_count = document.querySelector("#bet_amount_count"); 
 var timer_text = document.querySelector("#timer_text");
 var timer_bar = document.querySelector("#timer_bar");
+var bet__type_text = document.querySelectorAll(".bet__type_text");
 var square = document.querySelectorAll(".square");
+var mid_square = document.querySelector("#square11");
+var mid_square_two = document.querySelector("#square69");
+var red_count = document.querySelector("#red_count");
+var black_count = document.querySelector("#black_count");
+var green_count = document.querySelector("#green_count");
+var expectedColor = 0;
+var firstLoadColor = "black";
+var lastGreen = 0;
+var actualColor = 0;
+var last_100_arr = [];
+var num_red = 0;
+var num_green = 0;
+var num_black = 0;
+
+function determineColor() {
+    const minCeiled = Math.ceil(0);
+    const maxFloored = Math.floor(37);
+    var selectedNum = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+    var color = 0;
+
+    if (selectedNum > 0 && selectedNum <= 19) {
+        color = 1;
+        console.log("red");
+    } else if (selectedNum > 19 && selectedNum <= 37) {
+        color = 2;
+        console.log("black");
+    } else {
+        color = 3;
+        console.log("green");
+    }
+
+    return color;
+}
+
+function determineWinner(expectedColor, actualColor) {
+    var currentChips = Number(user_chips_count.innerText);
+    var currentBet = Number(bet_amount_count.value);
+    var newChips;
+
+    if (expectedColor == actualColor && actualColor != 3) {
+        newChips = 2 * currentBet;
+        currentChips+=newChips;
+        user_chips_count.innerText = currentChips.toString();
+    } else if (expectedColor == actualColor && actualColor == 3) {
+        newChips = 14 * currentBet;
+        currentChips+=newChips;
+        user_chips_count.innerText = currentChips.toString();
+    } else {
+        currentChips-=currentBet;
+        user_chips_count.innerText = currentChips.toString();
+    }
+}
+
+function resetBets() {
+    timer_text.innerText = "PLACE YOUR BET BELOW"; 
+    timer_bar.style.width = "100%"; 
+    bet_placed.style.pointerEvents = "auto";
+    bet_type.style.pointerEvents = "auto";
+    bet__type_text[0].innerText = "PLACE BET";
+    bet__type_text[1].innerText = "PLACE BET";
+    bet__type_text[2].innerText = "PLACE BET";
+    expectedColor = 0;
+
+    if (last_100_arr.length > 100) {
+        var oldestColor = last_100_arr.shift();
+
+        if (oldestColor == 1) {
+            num_red-=1;
+            red_count.innerText = num_red.toString();
+        } else if (oldest == 2) {
+            num_black-=1;
+            black_count.innerText = num_black.toString();
+        } else {
+            num_green-=1;
+            green_count.innerText = num_green.toString();
+        }
+    }
+
+    if (actualColor == 1) {
+        num_red+=1;
+        red_count.innerText = num_red.toString();
+    } else if (actualColor == 2) {
+        num_black+=1;
+        black_count.innerText = num_black.toString();
+    } else {
+        num_green+=1;
+        green_count.innerText = num_green.toString();
+    }
+    
+    for (var i = 0; i < square.length; i++) {
+        if (actualColor == 1) {
+            if (i % 2 == 0) {
+                square[i].style.backgroundColor = "red";
+            } else {
+                square[i].style.backgroundColor = "#36454F";
+            }
+        } else if (actualColor == 2) {
+            if (i % 2 == 0) {
+                square[i].style.backgroundColor = "#36454F";
+            } else {
+                square[i].style.backgroundColor = "red";
+            }
+        } else {
+            if (firstLoadColor == "black") {
+                if (i % 2 == 0) {
+                    square[i].style.backgroundColor = "#36454F";
+                } else {
+                    square[i].style.backgroundColor = "red";
+                }
+            } else {
+                if (i % 2 == 0) {
+                    square[i].style.backgroundColor = "red";
+                } else {
+                    square[i].style.backgroundColor = "#36454F";
+                }
+            }
+        }
+
+        square[i].style.transition = "none";
+        square[i].style.transform = "translateX(-30px)";
+    }
+
+    if (lastGreen == 1) {
+        mid_square.style.backgroundColor = "#4CBB17";
+    }
+
+    lastGreen = 0;
+    actualColor = 0;
+}
 
 function rollWheel() {
-    setInterval(() => {
-        for (var i = 0; i < square.length; i++) {
-            square[i].style.transform = "translateX(-90px)";
+    actualColor = determineColor();
+    const start_time = Date.now();
+    var current_time = Date.now();
+    var diff = 6000;
+
+    var cooldown = setInterval(() => {
+        current_time = Date.now();
+
+        var square = document.querySelectorAll(".square");
+
+        if (actualColor == 3) {
+            mid_square_two.style.backgroundColor = "#4CBB17";
+            lastGreen = 1;
         }
+        
+        for (var i = 0; i < square.length; i++) {
+            square[i].style.transition = "transform 5s";
+
+            if (firstLoadColor == "black" && actualColor == 2) {
+                square[i].style.transform = "translateX(-3800px)";
+            } else if (firstLoadColor == "black" && actualColor == 1) {
+                square[i].style.transform = "translateX(-3865px)";
+            } else if (firstLoadColor == "red" && actualColor == 1) {
+                square[i].style.transform = "translateX(-3800px)";
+            } else if (firstLoadColor == "red" && actualColor == 2){
+                square[i].style.transform = "translateX(-3865px)";
+            } else {
+                square[i].style.transform = "translateX(-3800px)";
+            }
+        }
+
+        if (current_time - start_time >= diff) {
+            if (actualColor == 1) {
+                firstLoadColor = "red";
+            } else if (actualColor == 2) {
+                firstLoadColor = "black";
+            } else {
+                // Do nothing.
+            }
+            clearInterval(cooldown);
+            last_100_arr.push(actualColor);
+            determineWinner(expectedColor, actualColor);
+            resetBets();
+        }
+
     }, 1000);
+
 }
 
 function betCooldown() {
@@ -820,8 +1010,22 @@ function placeBet(e) {
         bet_type.style.pointerEvents = "none";
 
         if (e.target.className == "bet__type_text") {
+            if (e.target.id == "bet_type_red_text") {
+                expectedColor = 1;
+            } else if (e.target.id == "bet_type_black_text") {
+                expectedColor = 2;
+            } else {
+                expectedColor = 3;
+            }
             e.target.innerText = "BET PLACED";
         } else {
+            if (e.target.id == "bet_type_red_button") {
+                expectedColor = 1;
+            } else if (e.target.id == "bet_type_black_button") {
+                expectedColor = 2;
+            } else {
+                expectedColor = 3;
+            }
             e.target.querySelector(".bet__type_text").innerText = "BET PLACED";
         }
 
