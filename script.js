@@ -797,7 +797,7 @@ function recentTenColors() {
 
 function determineColor() {
     const minCeiled = Math.ceil(0);
-    const maxFloored = Math.floor(37);
+    const maxFloored = Math.floor(38);
     var selectedNum = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
     var color = 0;
 
