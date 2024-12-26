@@ -1,32 +1,40 @@
-# Roulette
+# roulette-fastapi
 
 ## Overview
-The casino game featuring a wheel of numbers where you have to predict where the ball will land.
+The popular casino game featuring a wheel of numbers where you have to predict where the ball will land.
 
 ## Video
-Check out a video of the website [here](https://www.youtube.com/watch?v=Sgs9wJHx90s).
+OUTDATED: Check out a video of the website [here](https://www.youtube.com/watch?v=Sgs9wJHx90s).
 
 ## Screenshots
 ![website](screenshots/roulette_website.png)
 
 ## Description
-View the website [here](https://miknsj.github.io/roulette).
+View the old website [here](https://miknsj.github.io/roulette/).
+
+Due to limitations, if you want to view the new website, then you can build the
+website locally using the docker config files: dockerfile and
+docker-compose.yaml. The address of the website when run locally is just
+```localhost```.
+
+This website was made with Vanilla JS, Bootstrap 5, and FastAPI.
 
 ## Notes
-Unlike previous websites that I have built, this will be mostly created using JavaScript only.
-
-<br>
-
-Also, the responsive/adaptive design will not be fully enforced. This means that the website may not render properly on
-smaller devices. For the BEST viewing purposes, I recommend loading the website on a device with at least the screen
+Due to a old layout, this website does not have a responsive design. This means
+that the website will be fully scaled on smaller devices. For the BEST viewing
+purposes, I recommend loading the website on a device with at least the screen
 size of 1300px.
 
 ## Contents
-- ```assets```: contains images displayed on the website
-- ```README.md```: contains description of the repository
-- ```index.html```: main html file
-- ```styles.css```: main css file
-- ```script.js```: main javascript file
+- ```README.md```: description of this repository
+- ```.gitignore```: ignores unwanted files (garbage collection)
+- ```.dockerignore```: ignores unwanted files for the container
+- ```frontend```: contains files to style the website
+- ```backend```: contains files to maintain user accounts and page routing
+- ```docker-compose.yaml```: builds the website locally
+- ```dockerfile```: builds a container loaded with FastAPI packages
+- ```screenshots```: contains pictures of the website
+- ```video```: contains a video of the website
 
 ## Contributions
 Tools
@@ -34,6 +42,9 @@ Tools
 - WSL2 (Ubuntu 11.4.0)
 - Vim + coc.nvim
 - npm + live-server
+- Docker
+- FastAPI + additional python packages
+- Bootstrap 5.3.3 CDN
 
 <br>
 

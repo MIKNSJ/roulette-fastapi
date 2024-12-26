@@ -42,7 +42,7 @@ div_header.appendChild(div);
 /* Create header::brand: icon and name */
 var brand = document.getElementById("brand");
 var img = document.createElement("img");
-img.src = "assets/roulette.jpg";
+img.src = "../static/assets/roulette.jpg";
 img.alt = "roulette_wheel";
 img.id = "roulette_wheel";
 img.style.width = "50px";
@@ -72,12 +72,13 @@ div.style.display = "flex";
 div.style.alignItems = "center";
 div.style.gap = "10px";
 var img = document.createElement("img");
-img.src = "assets/poker_chip.png";
+img.src = "../static/assets/poker_chip.png";
 img.alt = "poker_chip";
 img.id = "poker_chip";
 img.style.width = "50px";
 img.style.height = "50px";
 div.appendChild(img);
+
 var h1 = document.createElement("h1");
 h1.id = "user_chips_count";
 h1.innerText = "1000000";
@@ -86,13 +87,20 @@ div.appendChild(h1);
 user.appendChild(div);
 
 /* Create header::user: account */
+var a = document.createElement("a");
+a.href = "/account/login";
+a.rel = 'noopener noreferrer';
+a.id = "user_link"
+user.appendChild(a);
+
 var img = document.createElement("img");
-img.src = "assets/person.png";
+var userLink = document.getElementById("user_link");
+img.src = "../static/assets/person.png";
 img.alt = "person";
 img.id = "person";
 img.style.width = "50px";
 img.style.height = "50px";
-user.appendChild(img);
+userLink.appendChild(img);
 
 /* Create main tag */
 var main = document.createElement("main");
@@ -439,7 +447,7 @@ bet_amount.appendChild(div);
 /* bet amount: insert */
 var bet_amount_title = document.querySelector("#bet_amount_title");
 var img = document.createElement("img");
-img.src = "assets/poker_chip.png";
+img.src = "../static/assets/poker_chip.png";
 img.style.width = "25px";
 img.style.height = "25px";
 bet_amount_title.appendChild(img);
@@ -776,10 +784,10 @@ var last_10_arr = [];
 var num_red = 0;
 var num_green = 0;
 var num_black = 0;
-const bet_placed_audio = new Audio("assets/bet_placed.mp3");
-const wheel_spin_audio = new Audio("assets/wheel_spin.mp3");
-const won_audio = new Audio("assets/won.mp3");
-const lose_audio = new Audio("assets/lose.mp3");
+const bet_placed_audio = new Audio("../static/assets/bet_placed.mp3");
+const wheel_spin_audio = new Audio("../static/assets/wheel_spin.mp3");
+const won_audio = new Audio("../static/assets/won.mp3");
+const lose_audio = new Audio("../static/assets/lose.mp3");
 
 function recentTenColors() {
     for (var i = 0; i < 10; i++) {

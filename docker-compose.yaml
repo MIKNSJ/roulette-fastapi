@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    container_name: rb
+    command: uvicorn main:app --host 0.0.0.0 --port 80 --reload --reload-include *
+    ports:
+      - 80:80
+    volumes:
+      - ./backend/app:/app
+      - ./frontend/index.html:/app/templates/index.html
+      - ./frontend/create.html:/app/templates/create.html
+      - ./frontend/login.html:/app/templates/login.html
+      - ./frontend/logout.html:/app/templates/logout.html
+      - ./frontend/styles.css:/app/static/styles.css
+      - ./frontend/script.js:/app/static/script.js
+      - ./frontend/assets:/app/static/assets

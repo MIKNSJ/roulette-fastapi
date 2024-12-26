@@ -1,0 +1,4 @@
+docker build -t roulette-backend .
+docker run --name rb1 -p 80:80
+docker start -i rb1
+docker run -p 8000:8000 -v $(pwd)/static:/app/static -v $(pwd)/templates:/app/templates <image-name>
