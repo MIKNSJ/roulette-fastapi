@@ -10,7 +10,7 @@ OUTDATED: Check out a video of the website [here](https://www.youtube.com/watch?
 ![website](screenshots/roulette_website.png)
 
 ## Description
-View the old website [here](https://miknsj.github.io/roulette/).
+View the old website [here](https://roulette-2024.netlify.app/).
 
 Due to limitations, if you want to view the new website, then you can build the
 website locally using the docker config files: dockerfile and

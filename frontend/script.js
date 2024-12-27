@@ -81,7 +81,8 @@ div.appendChild(img);
 
 var h1 = document.createElement("h1");
 h1.id = "user_chips_count";
-h1.innerText = "1000000";
+//h1.innerText = "-1"; // before page has fully loaded
+h1.innerText = "1000000"; // before page has fully loaded
 h1.style.color = "white";
 div.appendChild(h1);
 user.appendChild(div);
@@ -789,6 +790,25 @@ const wheel_spin_audio = new Audio("../static/assets/wheel_spin.mp3");
 const won_audio = new Audio("../static/assets/won.mp3");
 const lose_audio = new Audio("../static/assets/lose.mp3");
 
+
+
+async function fetchChips() {
+    try {
+        const response = await fetch("/bet/chips");
+
+        if (!response.ok) {
+            throw new Error("There was an error with the response.");
+        }
+
+        var data = await response.json();
+        user_chips_count.innerText = data.chips;
+    } catch (error) {
+        console.error("The fetch operation has been aborted:", error);
+    }
+};
+fetchChips();
+
+
 function recentTenColors() {
     for (var i = 0; i < 10; i++) {
         if (last_10_arr[i] == 1) {
@@ -802,6 +822,7 @@ function recentTenColors() {
         }
     }
 }
+
 
 function determineColor() {
     const minCeiled = Math.ceil(0);
@@ -823,7 +844,8 @@ function determineColor() {
     return color;
 }
 
-function determineWinner(expectedColor, actualColor) {
+
+async function determineWinner(expectedColor, actualColor) {
     var currentChips = Number(user_chips_count.innerText);
     var currentBet = Number(bet_amount_count.value);
     var newChips;
@@ -842,7 +864,18 @@ function determineWinner(expectedColor, actualColor) {
         user_chips_count.innerText = currentChips.toString();
         lose_audio.play();
     }
+
+
+    const data = {"chips": currentChips};
+    await fetch("/bet/result", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
 }
+
 
 function resetBets() {
     timer_text.innerText = "PLACE YOUR BET BELOW"; 
@@ -926,6 +959,7 @@ function resetBets() {
     actualColor = 0;
 }
 
+
 function rollWheel() {
     actualColor = determineColor();
     const start_time = Date.now();
@@ -978,6 +1012,7 @@ function rollWheel() {
 
 }
 
+
 function betCooldown() {
     const start_time = Date.now();
     var current_time = Date.now();
@@ -997,6 +1032,7 @@ function betCooldown() {
         }
     }, 1000)
 }
+
 
 function betType(type) {
     var currentChips = Number(user_chips_count.innerText);
@@ -1030,6 +1066,7 @@ function betType(type) {
     }
    
 }
+
 
 function placeBet(e) {
     var currentChips = Number(user_chips_count.innerText);
@@ -1070,6 +1107,7 @@ function placeBet(e) {
         betCooldown();
     }
 }
+
 
 var clear_button = document.querySelector("#clear_button");
 clear_button.addEventListener("click", function() {betType(0)})

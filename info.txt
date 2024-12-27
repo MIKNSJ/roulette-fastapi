@@ -1,0 +1,23 @@
+========== DOCKER INFO ========================================================
+These commands will run the backend, but there is no hot reload.
+docker build -t roulette-backend .
+docker run --name rb1 -p 80:80
+
+These commands will run the backend and provide hot reloads.
+Run: docker-compose up (--build: Optional) based on the following:
+    - initial build
+    - modified the dockerfile, .dockerignore, and/or docker-compose.yaml/.yml
+        - if modified, then add --build
+
+Run: docker stop <container-name> to stop the container in the terminal.
+Run: docker restart <container-name> to rerun the container in the terminal.
+NOTE: Restarting the container will hide logs, so use Docker Desktop or add
+optional flags before executing the commands.
+Ex:  docker-compose logs -f <container_name>
+NOTE: There is an issue where modifying .html, .css, or .js files can cause
+errors that prevent the docker-compose container to be ran. To fix this
+temporary, delete the existing container and rebuild with docker-compose up.
+NOTE: It appears that .html, .css, or .js files do not have hot reloading even
+with forced refresh, so rebuild the docker-compose container to see the new
+changes.
+========== END OF DOCKER INFO =================================================
