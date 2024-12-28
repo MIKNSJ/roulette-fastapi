@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./backend/app:/app
+      - ./backend:/app
       - ./frontend/index.html:/app/templates/index.html
       - ./frontend/create.html:/app/templates/create.html
       - ./frontend/login.html:/app/templates/login.html

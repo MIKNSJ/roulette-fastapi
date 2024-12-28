@@ -2,11 +2,9 @@ FROM python:3.12.8-slim
 
 WORKDIR /app
 
-COPY ./backend/requirements.txt ./requirements.txt
+COPY ./backend .
 
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
-
-COPY ./backend/app .
 
 COPY ./frontend/index.html ./templates/index.html
 
